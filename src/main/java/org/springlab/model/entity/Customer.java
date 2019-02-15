@@ -1,6 +1,7 @@
 package org.springlab.model.entity;
 
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 @Entity
+@Table (name = "customer")
 public class Customer {
     @Id
     @Column(name = "id")
