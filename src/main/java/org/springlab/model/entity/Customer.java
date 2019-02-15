@@ -11,8 +11,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 @Entity
-@Table (name = "customer")
+@Table(name = "customer")
 public class Customer {
+    private static String defaultPermission = "CUSTOMER";
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,8 +60,8 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Integer id, String username, String password, String permission, String fullName, Date dateOfBirth, String gender, String phone, String email, String address, String avatar, Boolean isVerified, Boolean active) {
-        this.id = id;
+    public Customer(String username, String password, String permission, String fullName, Date dateOfBirth,
+            String gender, String phone, String email, String address, String avatar) {
         this.username = username;
         this.password = password;
         this.permission = permission;
@@ -70,9 +72,7 @@ public class Customer {
         this.email = email;
         this.address = address;
         this.avatar = avatar;
-        this.isVerified = isVerified;
-        this.active = active;
-    }  
+    }
 
     // Getters & Setters
 
@@ -187,6 +187,12 @@ public class Customer {
     public void setActive(Boolean active) {
         this.active = active;
     }
-   
 
+    public static String getDefaultPermission() {
+        return defaultPermission;
+    }
+
+    public static void changeDefaultPermission(String permission) {
+        defaultPermission = permission;
+    }
 }

@@ -1,6 +1,6 @@
 package org.springlab.api.dto.request;
 
-public class AuthRequest extends BaseRequest{
+public class AuthRequest {
     private String username;
     private String password;
     private String email;
@@ -11,6 +11,8 @@ public class AuthRequest extends BaseRequest{
     private String address;
     private String avatar;
     private String verificationCode;
+    private String permission;
+
 
     // Constructors
 
@@ -112,4 +114,12 @@ public class AuthRequest extends BaseRequest{
         this.verificationCode = verificationCode;
     }
 
+
+    public String getPermission() {
+        return this.permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
 }

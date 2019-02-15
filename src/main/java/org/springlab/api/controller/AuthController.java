@@ -1,5 +1,7 @@
 package org.springlab.api.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,9 +11,8 @@ import org.springlab.api.dto.request.AuthRequest;
 import org.springlab.api.dto.response.AuthResponse;
 import org.springlab.api.routes.RouteAuthentication;
 import org.springlab.config.constant.Constant;
-import org.springlab.config.constant.ReturnCode;
-import org.springlab.config.constant.ReturnMessage;
 import org.springlab.core.service.AccountService;
+import org.springlab.model.entity.Customer;
 
 @RestController
 @RequestMapping(Constant.baseURL + RouteAuthentication.ROOT)
@@ -21,38 +22,22 @@ public class AuthController {
     private AccountService accountService;
 
     @PostMapping(RouteAuthentication.LOGIN)
-    public AuthResponse loginHandler(@RequestBody(required = false) AuthRequest req) {
+    public AuthResponse loginHandler(@RequestBody AuthRequest req) {
         AuthResponse res = accountService.login(req.getUsername(), req.getPassword());
 
-        if (res == null) {
-            return new AuthResponse(ReturnCode.FAILURE, ReturnMessage.LOGIN_FAILURE, null, null);
-        }
-
-        return new AuthResponse(ReturnCode.SUCCESS, ReturnMessage.LOGIN_SUCCESS, res.getPermission(), res.getToken());
+        return res;
     }
 
-    // @GetMapping(name = RouteAuthentication.REGISTER)
-    // public String registerHandler(){
-    // return "Hello this is rest";
-    // }
+    @PostMapping(RouteAuthentication.REGISTER)
+    public AuthResponse registerHandler(@RequestBody AuthRequest req) {
 
-    // @GetMapping(name = RouteAuthentication.EMAIL_VERIFICATION)
-    // public String emailVerificationHandler(){
-    // return "Hello this is rest";
-    // }
+        // TODO: format date of birth
+        Customer newCustomer = new Customer(req.getUsername(), req.getPassword(), req.getPermission(),
+                req.getFullName(), new Date(), req.getGender(), req.getPhone(), req.getEmail(), req.getAddress(),
+                req.getAvatar());
 
-    // @GetMapping(name = RouteAuthentication.RESET_PASSWORD)
-    // public String resetPasswordHandler(){
-    // return "Hello this is rest";
-    // }
+        AuthResponse res = accountService.register(newCustomer);
 
-    // @GetMapping(name = RouteAuthentication.RESET_EMAIL_VERIFICATION)
-    // public String resetEmailVerificationHandler(){
-    // return "Hello this is rest";
-    // }
-
-    // @GetMapping(name = RouteAuthentication.VERIFY_TOKEN)
-    // public String verifyTokenHandler(){
-    // return "Hello this is rest";
-    // }
+        return res;
+    }
 }
