@@ -30,7 +30,6 @@ public class JWTService {
         try {
             verifier.verify(token);
         } catch (JWTVerificationException exc) {
-            exc.printStackTrace();
             return false;
         }
 

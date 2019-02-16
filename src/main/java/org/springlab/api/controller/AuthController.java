@@ -7,6 +7,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springlab.api.dto.request.AuthRequest;
@@ -25,7 +26,7 @@ public class AuthController {
     private AccountService accountService;
 
     @PostMapping(RouteAuthentication.LOGIN)
-    public AuthResponse loginHandler(@RequestBody AuthRequest req) {
+    private AuthResponse loginHandler(@RequestBody AuthRequest req) {
         // Validation
         final String username = req.getUsername();
         final String password = req.getPassword();
@@ -44,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping(RouteAuthentication.REGISTER)
-    public AuthResponse registerHandler(@RequestBody AuthRequest req) {
+    private AuthResponse registerHandler(@RequestBody AuthRequest req) {
         // Validation
         if (req.getUsername() == null || req.getUsername().length() == 0) {
             return new AuthResponse(ReturnCode.FAILURE, "username is missing", null, null);
@@ -89,6 +90,18 @@ public class AuthController {
             return new AuthResponse(ReturnCode.FAILURE, exc.getMessage(), null, null);
         }
 
+        return res;
+    }
+
+    @PostMapping(RouteAuthentication.VERIFY_TOKEN)
+    private AuthResponse verifyTokenHandler(@RequestHeader(value = "Authorization") String jwtToken) {
+        // Validation
+        if (jwtToken == null || jwtToken.isEmpty()) {
+            return new AuthResponse(ReturnCode.FAILURE, "token is missing", null, null);
+        }
+
+        // Verify
+        AuthResponse res = accountService.verifyToken(jwtToken);
         return res;
     }
 }

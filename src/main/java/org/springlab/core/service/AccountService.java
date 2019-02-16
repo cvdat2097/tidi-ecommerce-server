@@ -55,4 +55,12 @@ public class AccountService {
 
         return new AuthResponse(ReturnCode.FAILURE, "Can't register new customer", null, null);
     }
+
+    public AuthResponse verifyToken(String jwtToken) {
+        if (JWTService.isValidToken(jwtToken) == false) {
+            return new AuthResponse(ReturnCode.FAILURE, "Token is invalid", null, null);
+        }
+
+        return new AuthResponse(ReturnCode.SUCCESS, "Token is valid", null, null);
+    }
 }
