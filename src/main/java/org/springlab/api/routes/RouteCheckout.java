@@ -1,6 +1,6 @@
 package org.springlab.api.routes;
 
-public final class RouteCheckout {
+public interface RouteCheckout {
     public static final String ROOT = "/checkout";
 
     public static final String CHECKOUT = "/checkout";
