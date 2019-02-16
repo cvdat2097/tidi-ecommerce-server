@@ -26,43 +26,21 @@ public class AccountService {
         return new AuthResponse(ReturnCode.SUCCESS, ReturnMessage.LOGIN_SUCCESS, tokenPermission, jwtToken);
     }
 
-    public AuthResponse register(Customer newCustomer) {
-        // Validation
-        if (newCustomer.getUsername() == null || newCustomer.getUsername().length() == 0) {
-            return new AuthResponse(ReturnCode.FAILURE, "username is missing", null, null);
-        }
-
-        if (newCustomer.getPassword() == null || newCustomer.getPassword().length() == 0) {
-            return new AuthResponse(ReturnCode.FAILURE, "password is missing", null, null);
-        }
-
-        if (newCustomer.getEmail() == null || newCustomer.getEmail().length() == 0) {
-            return new AuthResponse(ReturnCode.FAILURE, "email is missing", null, null);
-        }
-
-        if (newCustomer.getPhone() == null || newCustomer.getPhone().length() == 0) {
-            return new AuthResponse(ReturnCode.FAILURE, "phone number is missing", null, null);
-        }
-
-        if (newCustomer.getPermission() == null) {
-            newCustomer.setPermission(Customer.getDefaultPermission());
-        }
-
-        Customer exitsingCustomer = customerRepo.findExisting(newCustomer.getUsername(), newCustomer.getEmail(),
-                newCustomer.getPhone());
-
+    public AuthResponse register(Customer newCustomer) throws Exception{
+        // Find existing info
+        Customer exitsingCustomer = customerRepo.findExisting(newCustomer.getUsername(), newCustomer.getEmail(), newCustomer.getPhone());
         if (exitsingCustomer != null) {
             if (newCustomer.getUsername().equals(exitsingCustomer.getUsername())) {
-                return new AuthResponse(ReturnCode.FAILURE, "username is existing", null, null);
+                throw new Exception("username is existing");
             }
             if (newCustomer.getEmail().equals(exitsingCustomer.getEmail())) {
-                return new AuthResponse(ReturnCode.FAILURE, "email is existing", null, null);
+                throw new Exception("email is existing");
             }
             if (newCustomer.getPhone().equals(exitsingCustomer.getPhone())) {
-                return new AuthResponse(ReturnCode.FAILURE, "phone is existing", null, null);
+                throw new Exception("phone number is existing");
             }
         }
-
+        
         // Save to db
         try {
             customerRepo.save(newCustomer);
