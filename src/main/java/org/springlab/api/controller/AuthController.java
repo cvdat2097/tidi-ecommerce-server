@@ -1,7 +1,6 @@
 package org.springlab.api.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springlab.api.routes.RouteAuthentication;
 import org.springlab.config.constant.Constant;
 import org.springlab.config.constant.ReturnCode;
 import org.springlab.core.service.AuthService;
+import org.springlab.helper.HelperFunc;
 import org.springlab.model.entity.Customer;
 
 @RestController
@@ -67,13 +67,9 @@ public class AuthController {
             req.setPermission(Customer.getDefaultPermission());
         }
 
-        SimpleDateFormat dateFormatter = new SimpleDateFormat(Constant.DATE_FORMAT);
         Date customerDOB;
         try {
-            customerDOB = dateFormatter.parse(req.getDateOfBirth());
-            if (customerDOB == null) {
-                throw new ParseException("DOB is null", 1);
-            }
+            customerDOB = HelperFunc.getFormartedDate(req.getDateOfBirth());
         } catch (ParseException exc) {
             exc.printStackTrace();
             return new AuthResponse(ReturnCode.FAILURE, "DOB is in wrong format", null, null);

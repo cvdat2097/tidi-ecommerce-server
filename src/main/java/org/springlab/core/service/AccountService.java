@@ -1,5 +1,7 @@
 package org.springlab.core.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springlab.api.dto.response.AccountResponse;
@@ -20,5 +22,29 @@ public class AccountService {
         }
 
         return new AccountResponse(ReturnCode.SUCCESS, "User found", foundCustomer);
+    }
+
+    public AccountResponse updateCustomerInfo(String username, Date dateOfBirth, String address, String avatar) {
+        Customer foundCustomer = customerRepo.findByUsername(username);
+
+        if (foundCustomer == null) {
+            return new AccountResponse(ReturnCode.FAILURE, "User not found");
+        }
+
+        if (dateOfBirth != null) {
+            foundCustomer.setDateOfBirth(dateOfBirth);
+        }
+
+        if (address != null) {
+            foundCustomer.setAddress(address);
+        }
+
+        if (avatar != null) {
+            foundCustomer.setAddress(avatar);
+        }
+
+        customerRepo.save(foundCustomer);
+
+        return new AccountResponse(ReturnCode.SUCCESS, "Customer info is updated successfully");
     }
 }
