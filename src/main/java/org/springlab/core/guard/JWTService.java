@@ -6,6 +6,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import org.springlab.config.constant.JWTConfig;
 
@@ -15,7 +16,7 @@ public class JWTService {
     public static String generateToken(String username, String permission) {
         try {
 
-            String token = JWT.create().withClaim(username, username).withClaim(permission, permission)
+            String token = JWT.create().withClaim("username", username).withClaim(permission, permission)
                     .withExpiresAt(new Date(new Date().getTime() + JWTConfig.expireTime)).sign(JWTConfig.algorithmHS);
 
             return token;
@@ -34,5 +35,13 @@ public class JWTService {
         }
 
         return true;
+    }
+
+    public static DecodedJWT getDecodedToken(String token) {
+        try {
+            return verifier.verify(token);
+        } catch (JWTVerificationException exc) {
+            return null;
+        }
     }
 }

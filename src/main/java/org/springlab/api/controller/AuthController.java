@@ -19,7 +19,7 @@ import org.springlab.core.service.AuthService;
 import org.springlab.model.entity.Customer;
 
 @RestController
-@RequestMapping(Constant.baseURL + RouteAuthentication.ROOT)
+@RequestMapping(Constant.BASE_URL + RouteAuthentication.ROOT)
 public class AuthController {
 
     @Autowired
