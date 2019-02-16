@@ -66,4 +66,32 @@ public class AccountController {
 
         return new AccountResponse(ReturnCode.FAILURE, "token is invalid");
     }
+
+    @PostMapping(RouteAccount.UPDATE_PASSWORD)
+    private AccountResponse updatePasswordHandler(@RequestBody AccountRequest req,
+            @RequestHeader(value = "Authorization") String jwtToken) {
+        if (JWTService.isValidToken(jwtToken)) {
+            try {
+                final String username = JWTService.getDecodedToken(jwtToken).getClaim("username").asString();
+
+                final String oldPassword = req.getPassword();
+                final String newPassword = req.getNewPassword();
+
+                if (oldPassword == null || oldPassword.isEmpty()) {
+                    return new AccountResponse(ReturnCode.FAILURE, "Old password is missing");
+                }
+
+                if (newPassword == null || newPassword.isEmpty()) {
+                    return new AccountResponse(ReturnCode.FAILURE, "New password is missing");
+                }
+
+                return accountService.updatePassword(username, oldPassword, newPassword);
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                return new AccountResponse(ReturnCode.FAILURE, "Can not read account info");
+            }
+        }
+
+        return new AccountResponse(ReturnCode.FAILURE, "token is invalid");
+    }
 }

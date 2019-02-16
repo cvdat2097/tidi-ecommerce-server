@@ -47,4 +47,21 @@ public class AccountService {
 
         return new AccountResponse(ReturnCode.SUCCESS, "Customer info is updated successfully");
     }
+
+    public AccountResponse updatePassword(String username, String oldPassword, String newPassword) {
+        Customer foundCustomer = customerRepo.findByUsername(username);
+
+        if (foundCustomer == null) {
+            return new AccountResponse(ReturnCode.FAILURE, "User not found");
+        }
+
+        if (oldPassword.compareTo(foundCustomer.getPassword()) == 0) {
+            foundCustomer.setPassword(newPassword);
+
+            customerRepo.save(foundCustomer);
+            return new AccountResponse(ReturnCode.SUCCESS, "Customer password is updated successfully");
+        } else {
+            return new AccountResponse(ReturnCode.FAILURE, "Old password is incorrect");
+        }
+    }
 }
