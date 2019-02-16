@@ -11,7 +11,7 @@ import org.springlab.model.entity.Customer;
 import org.springlab.model.repository.CustomerRepository;
 
 @Service
-public class AccountService {
+public class AuthService {
     @Autowired
     private CustomerRepository customerRepo;
 

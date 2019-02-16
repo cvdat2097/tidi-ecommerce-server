@@ -15,7 +15,7 @@ import org.springlab.api.dto.response.AuthResponse;
 import org.springlab.api.routes.RouteAuthentication;
 import org.springlab.config.constant.Constant;
 import org.springlab.config.constant.ReturnCode;
-import org.springlab.core.service.AccountService;
+import org.springlab.core.service.AuthService;
 import org.springlab.model.entity.Customer;
 
 @RestController
@@ -23,7 +23,7 @@ import org.springlab.model.entity.Customer;
 public class AuthController {
 
     @Autowired
-    private AccountService accountService;
+    private AuthService authService;
 
     @PostMapping(RouteAuthentication.LOGIN)
     private AuthResponse loginHandler(@RequestBody AuthRequest req) {
@@ -39,7 +39,7 @@ public class AuthController {
         }
 
         // Login
-        AuthResponse res = accountService.login(username, password);
+        AuthResponse res = authService.login(username, password);
 
         return res;
     }
@@ -85,7 +85,7 @@ public class AuthController {
                 req.getAvatar());
         AuthResponse res;
         try {
-            res = accountService.register(newCustomer);
+            res = authService.register(newCustomer);
         } catch (Exception exc) {
             return new AuthResponse(ReturnCode.FAILURE, exc.getMessage(), null, null);
         }
@@ -101,7 +101,7 @@ public class AuthController {
         }
 
         // Verify
-        AuthResponse res = accountService.verifyToken(jwtToken);
+        AuthResponse res = authService.verifyToken(jwtToken);
         return res;
     }
 }
